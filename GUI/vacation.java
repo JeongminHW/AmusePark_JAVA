@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -23,27 +24,36 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+
+import org.xnio.channels.SslChannel;
+
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import javax.swing.DefaultComboBoxModel;
 
-public class vacation extends JFrame {
+import DB.*;
+import java.util.*;
+
+public class Vacation extends JFrame implements ActionListener {
 	static String id;
-	
 
 	public static String getId() {
 		return id;
 	}
 
 	public static void setId(String id) {
-		vacation.id = id;
+		Vacation.id = id;
 	}
 
 	private static final long serialVersionUID = 1L;
 
 	private JPanel mainPanel;
-	private JTextField vacationReasonTextfield = new JTextField();
 
 	// Define
 	CentralDropShadowPanel leftPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
@@ -74,6 +84,7 @@ public class vacation extends JFrame {
 	JPanel linePanel6 = new DrawLine();
 	JPanel vacationSubtitlePanel = new JPanel();
 	JPanel vacationLeftPanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
 
 	JLabel leftDownerTitleLabel = new JLabel("휴가 신청");
 	JLabel rightUpperTitleLabel = new JLabel("일정");
@@ -87,26 +98,27 @@ public class vacation extends JFrame {
 	JLabel lblNewLabel_4 = new JLabel("남은 휴가일수 : ");
 
 	JTextArea textArea = new JTextArea();
+	JTextField vacationReasonTextfield = new JTextField();
 
-	String[] Yparts = { "2020", "2021", "2022", "2023", "2024", "2025" };
-	JComboBox<String> dateSYearCombobox = new JComboBox<String>(Yparts);
+	JComboBox<String> dateSYearCombobox = new JComboBox<String>();
+	JComboBox<String> dateSMonthCombobox = new JComboBox<String>();
+	JComboBox<String> dateSDayCombobox = new JComboBox<String>();
+	JComboBox<String> dateEYearCombobox = new JComboBox<String>();
+	JComboBox<String> dateEMonthCombobox = new JComboBox<String>();
+	JComboBox<String> dateEDayCombobox = new JComboBox<String>();
 
-	String[] Mparts = { "01 ", "02", "03", "04", "05" };
-	JComboBox<String> dateSMonthCombobox = new JComboBox<String>(Mparts);
-
-	String[] Dparts = { "01 ", "02", "03", "04", "05" };
-	JComboBox<String> dateSDayCombobox = new JComboBox<String>(Dparts);
-
-	JComboBox<String> dateEYearCombobox = new JComboBox<String>(Yparts);
-	JComboBox<String> dateEMonthCombobox = new JComboBox<String>(Mparts);
-	JComboBox<String> dateEDayCombobox = new JComboBox<String>(Dparts);
-
+	JButton cancelButton = new RoundedButton("취소", 25);
 	JButton confirmButton = new RoundedButton("확인", 25);
+
+	DBMgr db = new DBMgr();
+	Vector<EmployeeBean> vlist;
 
 	/**
 	 * Create the frame.
+	 * 
+	 * @throws ParseException
 	 */
-	public vacation() {
+	public Vacation() throws ParseException {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 400);
 		mainPanel = new JPanel();
@@ -298,6 +310,49 @@ public class vacation extends JFrame {
 
 		});
 
+		// 콤보박스 설정
+		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		int month = now.get(Calendar.MONTH) + 1;
+		int day = now.get(Calendar.DATE);
+
+		dateSYearCombobox.addItem("선택");
+		dateSMonthCombobox.addItem("선택");
+		dateSDayCombobox.addItem("선택");
+		dateEYearCombobox.addItem("선택");
+		dateEMonthCombobox.addItem("선택");
+		dateEDayCombobox.addItem("선택");
+		for (int i = year; i < year + 5; i++) {
+			dateSYearCombobox.addItem(Integer.toString(i));
+			dateEYearCombobox.addItem(Integer.toString(i));
+		}
+
+		for (int i = 1; i < 13; i++) {
+			if (i < 10) {
+				dateSMonthCombobox.addItem("0" + Integer.toString(i));
+				dateEMonthCombobox.addItem("0" + Integer.toString(i));
+			} else {
+				dateSMonthCombobox.addItem(Integer.toString(i));
+				dateEMonthCombobox.addItem(Integer.toString(i));
+			}
+		}
+
+		for (int i = 1; i < now.getActualMaximum(Calendar.DAY_OF_MONTH) + 1; i++) {
+			if (i < 10) {
+				dateSDayCombobox.addItem("0" + Integer.toString(i));
+				dateEDayCombobox.addItem("0" + Integer.toString(i));
+			} else {
+				dateSDayCombobox.addItem(Integer.toString(i));
+				dateEDayCombobox.addItem(Integer.toString(i));
+			}
+		}
+
+		// 휴가 일수
+		vlist = db.TotalVacation("asdf123");
+		System.out.println(vlist.get(0).getUsable_vacation());
+		int Totalvacation = vlist.get(0).getUsable_vacation();
+		lblNewLabel_4.setText("남은 휴가 : " + Integer.toString(Totalvacation));
+
 		// setOpaque
 		rightUpperTitlePanel.setOpaque(false);
 		leftDownerTitlePanel.setOpaque(false);
@@ -306,6 +361,7 @@ public class vacation extends JFrame {
 		// set Backgrounds
 		leftPanel.setBackground(new Color(255, 255, 255));
 		rightPanel.setBackground(new Color(255, 255, 255));
+		buttonPanel.setBackground(new Color(255, 255, 255));
 		rightUpperPanel.setBackground(new Color(255, 255, 255));
 		rightDownerPanel.setBackground(new Color(255, 255, 255));
 		rightUpperTitlePanel.setBackground(new Color(255, 255, 255));
@@ -331,6 +387,7 @@ public class vacation extends JFrame {
 		linePanel6.setBackground(new Color(255, 255, 255));
 		vacationSubtitlePanel.setBackground(new Color(255, 255, 255));
 		vacationLeftPanel.setBackground(new Color(255, 255, 255));
+		cancelButton.setBackground(Color.LIGHT_GRAY);
 		confirmButton.setBackground(new Color(0, 148, 255));
 		vacationReasonLine.setBackground(new Color(255, 255, 255));
 		dateEMonthPanel.setBackground(new Color(255, 255, 255));
@@ -340,6 +397,7 @@ public class vacation extends JFrame {
 		dateEDayCombobox.setBackground(Color.WHITE);
 
 		// set Foreground
+		cancelButton.setForeground(Color.WHITE);
 		confirmButton.setForeground(Color.WHITE);
 
 		// set Layout
@@ -371,6 +429,7 @@ public class vacation extends JFrame {
 		dateSMonthLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		dateSDayLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		vacationReasonTitleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		cancelButton.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		confirmButton.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		dateEYearCombobox.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		dateEYearLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
@@ -401,6 +460,7 @@ public class vacation extends JFrame {
 		dateEYearCombobox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dateEMonthCombobox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		dateEDayCombobox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		cancelButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		confirmButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		// set Other
@@ -457,7 +517,9 @@ public class vacation extends JFrame {
 		vacationReasonPanel.add(vacationReasonLine);
 		rightDownerPanel.add(vacationLeftPanel);
 		vacationLeftPanel.add(lblNewLabel_4, BorderLayout.WEST);
-		vacationLeftPanel.add(confirmButton, BorderLayout.EAST);
+		buttonPanel.add(cancelButton);
+		buttonPanel.add(confirmButton);
+		vacationLeftPanel.add(buttonPanel, BorderLayout.EAST);
 		rightPanel.add(rightUpperPanel);
 		rightPanel.add(rightDownerPanel);
 
@@ -466,6 +528,61 @@ public class vacation extends JFrame {
 		mainPanel.add(leftPanel);
 		mainPanel.add(rightPanel);
 
+		cancelButton.addActionListener(this);
+		confirmButton.addActionListener(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String Syear = (String) dateSYearCombobox.getSelectedItem();
+		String Smonth = (String) dateSMonthCombobox.getSelectedItem();
+		String Sday = (String) dateSDayCombobox.getSelectedItem();
+		String Eyear = (String) dateEYearCombobox.getSelectedItem();
+		String Emonth = (String) dateEMonthCombobox.getSelectedItem();
+		String Eday = (String) dateEDayCombobox.getSelectedItem();
+		// 날짜 포맷 형식, 시작일 문자열, 종료일 문자열을 정의합니다.
+		String dateFormatType = "yyyyMMdd";
+		String strDate = Syear + "" + Smonth + "" + Sday;
+		String endDate = Eyear + "" + Emonth + "" + Eday;
+
+		// SimpleDateFormat 객체를 생성하고 포맷 형식을 설정합니다.
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormatType);
+
+		// 시작일과 종료일 문자열을 Date 객체로 변환합니다.
+		Date from;
+		Date to;
+		long diff;
+		long re;
+
+		Object obj = e.getSource();
+		if (obj == cancelButton) {
+			dispose();
+		} else if (obj == confirmButton) {
+			if(!Syear.equals("선택") && !Smonth.equals("선택") && !Sday.equals("선택") && !Eyear.equals("선택") && !Emonth.equals("선택") && !Eday.equals("선택")) {
+				try {
+					from = simpleDateFormat.parse(strDate);
+					to = simpleDateFormat.parse(endDate);
+					// 두 날짜의 차이를 밀리초 단위로 계산합니다.
+					diff = to.getTime() - from.getTime();
+
+					// 밀리초 단위의 차이를 일수로 변환합니다.
+					re = diff / 86400000L;
+					// 결과를 출력합니다.
+					System.out.println(from);
+				} catch (ParseException e1) {
+					JOptionPane.showMessageDialog(null, "휴가 시작일과 종료일을 선택해주세요.", "휴가 신청", JOptionPane.ERROR_MESSAGE);
+				}
+				VacationBean bean = new VacationBean();
+				bean.setId("asdf123");
+				bean.setStart(strDate);
+				bean.setEnd(endDate);
+				bean.setReason(vacationReasonTextfield.getText());
+				db.savaVacationEmployee(bean);
+				JOptionPane.showMessageDialog(null, "휴가 신청이 완료되었습니다.", "휴가 신청", JOptionPane.PLAIN_MESSAGE);
+				dispose();
+			}
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -473,7 +590,7 @@ public class vacation extends JFrame {
 			@Override
 			public void run() {
 				try {
-					vacation frame = new vacation();
+					Vacation frame = new Vacation();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -16,7 +16,7 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 import java.awt.Component;
 
-public class vacationConfirm extends JFrame {
+public class VacationConfirm extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
@@ -28,7 +28,7 @@ public class vacationConfirm extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					vacationConfirm frame = new vacationConfirm();
+					VacationConfirm frame = new VacationConfirm();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,7 +40,7 @@ public class vacationConfirm extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public vacationConfirm() {
+	public VacationConfirm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 400);
 		mainPanel = new JPanel();
