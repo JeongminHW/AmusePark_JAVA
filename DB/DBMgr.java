@@ -339,6 +339,7 @@ public class DBMgr {
 	// 문의사항 이름 확인
 		public String myName(String id) {
 			String name = null;
+
 			try {
 				con = pool.getConnection();
 				sql = "select alba_name from alba where alba_id=?";
