@@ -1,4 +1,4 @@
-package cmp.GUI;
+package GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -24,7 +26,7 @@ import java.awt.Component;
 import javax.swing.Box;
 
 import java.util.*;
-import cmp.DB.*;
+import DB.*;
 
 public class AlbaMain extends JFrame implements ActionListener {
 	static String id;
