@@ -1,11 +1,19 @@
-package cmp.DB;
+package DB;
 
 public class VacationBean {
+	private int num;
 	private String id;
 	private String name;
 	private String start;
 	private String end;
 	private String reason;
+	
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
 	public String getId() {
 		return id;
 	}

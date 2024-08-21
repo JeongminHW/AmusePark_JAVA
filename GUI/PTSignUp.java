@@ -183,7 +183,7 @@ public class PTSignUp implements ActionListener, MouseListener {
 			char birthChar = 0;
 			for (int i = 0; i < birthday.length(); i++) {
 				birthChar = birthday.charAt(i);
-				System.out.println(birthChar);
+				//System.out.println(birthChar);
 			}
 			if (!Character.isDigit(birthChar)) { // 생년월일 숫자로 입력
 				JOptionPane.showMessageDialog(null, "생년월일을 숫자로 입력해주세요.", "비밀번호 오류", JOptionPane.ERROR_MESSAGE);

@@ -1,4 +1,4 @@
-package cmp.GUI;
+package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-import cmp.DB.*;
+import DB.*;
 
 public class reviewForm implements ActionListener {
 
@@ -34,6 +34,7 @@ public class reviewForm implements ActionListener {
 		this.bean = bean;
 		frame = new JFrame("문의사항 검토");
 		frame.setSize(600, 400);
+		frame.setVisible(true);
 
 		p1 = new Panel(new GridLayout(4, 1));
 		p2 = new Panel(new GridLayout(1, 2));

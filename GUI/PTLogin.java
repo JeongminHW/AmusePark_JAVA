@@ -133,9 +133,9 @@ public class PTLogin implements ActionListener, MouseListener{
         	String pw = new String(PwField.getPassword());
         	if(db.LoginCheckAlba(id, pw)) {
         		System.out.println("로그인 성공");
-        		AlbaMain albamain = new AlbaMain();
+        		AlbaMain albamain = new AlbaMain(id);
 				albamain.setId(id);
-				new AlbaMain();
+				albamain.setVisible(true);
 				frame.dispose();
         	}
         	else {

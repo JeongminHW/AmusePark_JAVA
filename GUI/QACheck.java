@@ -1,4 +1,4 @@
-package cmp.GUI;
+package GUI;
 
 import java.awt.EventQueue;
 
@@ -22,7 +22,7 @@ import javax.swing.JButton;
 import java.awt.Cursor;
 import javax.swing.BorderFactory;
 import javax.swing.SwingConstants;
-import cmp.DB.*;
+import DB.*;
 
 public class QACheck extends JFrame {
 
@@ -35,31 +35,16 @@ public class QACheck extends JFrame {
 	reviewForm rf;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					QACheck frame = new QACheck("qwer111");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public QACheck(String id) {
 		
 		this.id=id;
-		vlist = db.selectinquire();
+		vlist = db.selectInquireManager();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 500);
+		setVisible(true);
 		mainPanel = new JPanel();
 		mainPanel.setBackground(Color.WHITE);
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -206,4 +191,19 @@ public class QACheck extends JFrame {
 		contentAnswerContainerPanel.add(contentAnswerLinePanel);
 	}
 
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					QACheck frame = new QACheck("qwer111");
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 }
