@@ -237,8 +237,4 @@ public class reviewForm extends JFrame implements ActionListener {
 			}
 		}
 	}
-
-	public static void main(String[] args) {
-		new reviewForm(null, null);
-	}
 }
