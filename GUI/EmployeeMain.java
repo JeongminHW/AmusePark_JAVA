@@ -48,8 +48,8 @@ import cmp.DB.*;
 import cmp.GUI.*;
 
 public class EmployeeMain extends JFrame implements ActionListener {
-
-	static String id;
+	private static EmployeeMain instance;
+	private static String id;
 
 	public static String getId() {
 		return id;
@@ -58,7 +58,13 @@ public class EmployeeMain extends JFrame implements ActionListener {
 	public static void setId(String id) {
 		EmployeeMain.id = id;
 	}
-
+	
+	public static EmployeeMain getInstance() {
+        if (instance == null) {
+            instance = new EmployeeMain();
+        }
+        return instance;
+    }
 	DBMgr db = new DBMgr();
 	Vector<TodoBean> vlist;
 
@@ -575,8 +581,6 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		if (obj == vacationButton) {
 			if (db.CheckManagerEmployee(id)) {
-				VacationConfirm vconfirm = new VacationConfirm();
-				vconfirm.setId(id);
 				new VacationConfirm();
 			} else {
 				Vacation vaca = new Vacation();
@@ -587,10 +591,9 @@ public class EmployeeMain extends JFrame implements ActionListener {
 			if (db.CheckManagerEmployee(id)) {
 				NoticeCreate nc = new NoticeCreate();
 				nc.setId(id);
-				setVisible(false);
+				//setVisible(false);
+				dispose();
 			} else {
-				NoticeView nv = new NoticeView();
-				nv.setId(id);
 				new NoticeView();
 			}
 		} else if (obj == myPageButton) {
@@ -600,7 +603,7 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		} else if (obj == QAButton) {
 			if(db.CheckManagerEmployee(id)) {
 				QACheck qa = new QACheck(id);
-				setVisible(false);
+				dispose();
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "권한이 없습니다.", "문의사항", JOptionPane.ERROR_MESSAGE);
@@ -609,6 +612,7 @@ public class EmployeeMain extends JFrame implements ActionListener {
 			ToDoList todo = new ToDoList();
 			todo.setEm_id(id);
 			new ToDoList();
+			dispose();
 		}
 		else if(obj == logOut) {
 			dispose();
