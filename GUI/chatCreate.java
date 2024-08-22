@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,7 +29,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.Component;
 
-import DB.*;
+import cmp.DB.*;
 
 public class chatCreate extends JFrame {
 

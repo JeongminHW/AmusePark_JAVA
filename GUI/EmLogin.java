@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import DB.*;
+import cmp.DB.*;
 
 public class EmLogin implements ActionListener, MouseListener {
 	DBMgr db = new DBMgr();
@@ -38,6 +38,8 @@ public class EmLogin implements ActionListener, MouseListener {
 	JPasswordField PwField = new JPasswordField("Password");
 	JButton SignInBtn = new RoundedButton("로그인", 32);
 	JButton SignUpBtn = new RoundedButton("회원가입", 32);
+	ImageIcon back_icon = new ImageIcon("./cmp/IMG/back_img.png");
+	JButton backButton = new RoundedButton(back_icon, 30);
 
 	public EmLogin() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,6 +53,11 @@ public class EmLogin implements ActionListener, MouseListener {
 
 		btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
 		btnPanel.setBackground(Color.WHITE);
+		
+		// '뒤로' 버튼을 위한 새로운 패널 생성
+	    JPanel backButtonPanel = new JPanel();
+	    backButtonPanel.setLayout(new BoxLayout(backButtonPanel, BoxLayout.X_AXIS));
+	    backButtonPanel.setBackground(Color.WHITE);
 
 		ImageIcon icon = new ImageIcon("src/image/TestImage.jpg"); // 이미지 경로를 입력
 		Image img = icon.getImage();
@@ -81,14 +88,6 @@ public class EmLogin implements ActionListener, MouseListener {
 		SignUpBtn.setForeground(Color.WHITE);
 		SignUpBtn.setBackground(Color.BLACK);
 
-		// 이벤트
-		SignInBtn.addActionListener(this);
-		SignUpBtn.addActionListener(this);
-		SignInBtn.addMouseListener(this);
-		SignUpBtn.addMouseListener(this);
-		idField.addMouseListener(this);
-		PwField.addMouseListener(this);
-
 		SignInBtn.setMaximumSize(new Dimension(100, 40));
 		SignUpBtn.setMaximumSize(new Dimension(100, 40));
 		idField.setMaximumSize(new Dimension(180, 40));
@@ -103,9 +102,19 @@ public class EmLogin implements ActionListener, MouseListener {
 		loginPanel.add(PwField);
 		loginPanel.add(Box.createVerticalStrut(10));
 		loginPanel.add(linePanel2); // 줄 추가
+		
 		btnPanel.add(SignUpBtn);
 		btnPanel.add(Box.createHorizontalStrut(10)); // 버튼 사이의 간격
 		btnPanel.add(SignInBtn);
+		btnPanel.add(Box.createHorizontalStrut(10)); // 버튼 사이의 간격
+		btnPanel.add(backButton);
+		
+		// '뒤로' 버튼을 별도의 패널에 추가
+		backButton.setBackground(Color.WHITE);
+	    backButtonPanel.add(backButton);
+	    backButtonPanel.add(Box.createVerticalStrut(10));
+
+		mainPanel.add(backButtonPanel); // '뒤로' 버튼 패널 추가
 		mainPanel.add(Box.createVerticalStrut(50)); // 상단 여백
 		mainPanel.add(imageLabel);
 		mainPanel.add(Box.createVerticalStrut(60)); // 이미지와 ID 사이의 간격
@@ -116,6 +125,15 @@ public class EmLogin implements ActionListener, MouseListener {
 		frame.add(mainPanel);
 
 		frame.setVisible(true);
+
+		// 이벤트
+		SignInBtn.addActionListener(this);
+		SignUpBtn.addActionListener(this);
+		backButton.addActionListener(this);
+		SignInBtn.addMouseListener(this);
+		SignUpBtn.addMouseListener(this);
+		idField.addMouseListener(this);
+		PwField.addMouseListener(this);
 	}
 
 	@Override
@@ -136,6 +154,9 @@ public class EmLogin implements ActionListener, MouseListener {
 			}
 		} else if (obj == SignUpBtn) {
 			new EmSignUp();
+			frame.dispose();
+		} else if (obj == backButton) {
+			new Login();
 			frame.dispose();
 		}
 	}

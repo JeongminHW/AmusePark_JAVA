@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.EventQueue;
 
@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
-import DB.*;
+import cmp.DB.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -498,6 +498,14 @@ public class NoticeCreate extends JFrame {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+			}
+		});
+		
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new EmployeeMain();
 			}
 		});
 	}

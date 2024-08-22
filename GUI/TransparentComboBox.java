@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxUI;

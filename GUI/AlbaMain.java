@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -6,7 +6,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -26,7 +25,7 @@ import java.awt.Component;
 import javax.swing.Box;
 
 import java.util.*;
-import DB.*;
+import cmp.DB.*;
 
 public class AlbaMain extends JFrame implements ActionListener {
 	static String id;
@@ -43,20 +42,29 @@ public class AlbaMain extends JFrame implements ActionListener {
 	private JPanel mainPanel;
 	DBMgr db = new DBMgr();
 	static Vector<InquireBean> vlist;
+	static Vector<TodoBean> tlist;
+	JPanel contentPanel = new JPanel();
+	JPanel newPanel;
+	JLabel newJLabel;
 	CentralDropShadowPanel rightPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
+	CentralDropShadowPanel leftUpperPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
+	CentralDropShadowPanel leftDownerPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
 	JLabel appLabel1 = new JLabel("할 일");
 	JLabel appLabel2 = new JLabel("일정");
 	JLabel appLabel3 = new JLabel("마이페이지");
 	JLabel appLabel4 = new JLabel("출근");
+	JLabel appLabel5 = new JLabel("대타");
 	ImageIcon mypage_icon = new ImageIcon("./cmp/IMG/user_img.png");
 	ImageIcon todo_icon = new ImageIcon("./cmp/IMG/todo_img.png");
 	ImageIcon schedule_icon = new ImageIcon("./cmp/IMG/schedule_img.png");
 	ImageIcon workin_icon = new ImageIcon("./cmp/IMG/commute_img.png");
 	ImageIcon workout_icon = new ImageIcon("./cmp/IMG/exit_img.png");
+	ImageIcon substitute_icon = new ImageIcon("./cmp/IMG/change_img.png");
 	JButton appButton1 = new RoundedButton(todo_icon, 20);
 	JButton appButton2 = new RoundedButton(schedule_icon, 20);
 	JButton appButton3 = new RoundedButton(mypage_icon, 20);
 	JButton appButton4 = new RoundedButton(workin_icon, 20);
+	JButton appButton5 = new RoundedButton(substitute_icon, 20);
 	JButton logOut = new RoundedButton("로그아웃", 15);
 
 	/**
@@ -68,7 +76,7 @@ public class AlbaMain extends JFrame implements ActionListener {
 		vlist = db.selectinquire(id);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 800, 450);
+		setBounds(100, 100, 800, 550);
 		setVisible(true);
 		setTitle("알바 - " + id);
 		mainPanel = new JPanel();
@@ -83,8 +91,7 @@ public class AlbaMain extends JFrame implements ActionListener {
 		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		mainPanel.add(leftPanel);
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-
-		CentralDropShadowPanel leftUpperPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
+		
 		leftUpperPanel.setMaximumSize(new Dimension(300, 32767));
 		leftUpperPanel.setPreferredSize(new Dimension(300, 34));
 		leftUpperPanel.setBackground(Color.WHITE);
@@ -92,19 +99,6 @@ public class AlbaMain extends JFrame implements ActionListener {
 		leftPanel.add(leftUpperPanel);
 		leftUpperPanel.setLayout(new BoxLayout(leftUpperPanel, BoxLayout.Y_AXIS));
 
-		JPanel todoTitlePanel = new JPanel();
-		todoTitlePanel.setBorder(new EmptyBorder(0, 5, 0, 5));
-		todoTitlePanel.setMaximumSize(new Dimension(32767, 34));
-		todoTitlePanel.setOpaque(false);
-		FlowLayout flowLayout = (FlowLayout) todoTitlePanel.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
-		leftUpperPanel.add(todoTitlePanel);
-
-		JLabel todoTitleLabel = new JLabel("할일");
-		todoTitleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-		todoTitlePanel.add(todoTitleLabel);
-
-		CentralDropShadowPanel leftDownerPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
 		leftDownerPanel.setPreferredSize(new Dimension(300, 225));
 		leftDownerPanel.setMaximumSize(new Dimension(300, 225));
 		leftDownerPanel.setBackground(Color.WHITE);
@@ -114,8 +108,19 @@ public class AlbaMain extends JFrame implements ActionListener {
 		JPanel calenderPanel = new CalendarPanel();
 		calenderPanel.setBorder(new EmptyBorder(15, 5, 15, 5));
 		calenderPanel.setOpaque(false);
-		leftDownerPanel.add(calenderPanel);
+		leftUpperPanel.add(calenderPanel);
 
+		JPanel todoTitlePanel = new JPanel();
+		todoTitlePanel.setBorder(new EmptyBorder(0, 5, 0, 5));
+		todoTitlePanel.setMaximumSize(new Dimension(32767, 34));
+		todoTitlePanel.setOpaque(false);
+		FlowLayout flowLayout = (FlowLayout) todoTitlePanel.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		leftDownerPanel.add(todoTitlePanel);
+
+		JLabel todoTitleLabel = new JLabel("할일");
+		todoTitleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		todoTitlePanel.add(todoTitleLabel);
 		CentralDropShadowPanel centerPanel = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);
 		centerPanel.setPreferredSize(new Dimension(100, 34));
 		centerPanel.setMaximumSize(new Dimension(100, 32767));
@@ -197,6 +202,23 @@ public class AlbaMain extends JFrame implements ActionListener {
 		appLabel4.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		appContainerPanel4.add(appLabel4);
 
+		JPanel appContainerPanel5 = new JPanel();
+		appContainerPanel5.setOpaque(false);
+		appContainerPanel5.setBorder(new EmptyBorder(10, 0, 7, 0));
+		centerPanel.add(appContainerPanel5);
+		appContainerPanel5.setLayout(new BoxLayout(appContainerPanel5, BoxLayout.Y_AXIS));
+
+		appButton5.setAlignmentX(Component.CENTER_ALIGNMENT);
+		appButton5.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		appButton5.setBackground(Color.white);
+		appButton5.setMaximumSize(new Dimension(50, 50));
+		appButton5.setPreferredSize(new Dimension(50, 50));
+		appContainerPanel5.add(appButton5);
+
+		appLabel5.setAlignmentX(Component.CENTER_ALIGNMENT);
+		appLabel5.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+		appContainerPanel5.add(appLabel5);
+
 		logOut.setMaximumSize(new Dimension(60, 23));
 		logOut.setPreferredSize(new Dimension(60, 23));
 		logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -210,7 +232,9 @@ public class AlbaMain extends JFrame implements ActionListener {
 		appButton3.addActionListener(this);
 		appButton4.addActionListener(this);
 		logOut.addActionListener(this);
+
 		refreshQAList();
+		updateTodoPanel();
 	}
 
 	public void creatrQAPanel() {
@@ -319,6 +343,26 @@ public class AlbaMain extends JFrame implements ActionListener {
 		}
 	}
 
+	// 할 일 패널 추가
+	public void updateTodoPanel() {
+		tlist = db.selectTodo(id);
+
+		for (int i = 0; i < vlist.size(); i++) {
+			newPanel = new JPanel();
+			newPanel.setOpaque(false);
+			newPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+			newJLabel = new JLabel("● " + tlist.get(i).getTodo_contents());
+			newJLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+
+			newPanel.add(newJLabel);
+			leftDownerPanel.add(newPanel);
+		}
+
+		leftDownerPanel.revalidate();
+		leftDownerPanel.repaint();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
@@ -326,10 +370,10 @@ public class AlbaMain extends JFrame implements ActionListener {
 		if (obj == appButton1) {
 			ToDoList todolist = new ToDoList();
 			todolist.setAlba_id(id);
-			dispose();
+			new ToDoList();
+			setVisible(false);
 		} else if (obj == appButton2) { // 일정 버튼
-			NoticeView nv = new NoticeView();
-			dispose();
+			new NoticeView();
 		} else if (obj == appButton3) {
 			MyPage mypage = new MyPage();
 			mypage.setAlba_id(id);

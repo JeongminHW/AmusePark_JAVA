@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +11,7 @@ import javax.swing.*;
 
 import org.xnio.channels.SslChannel;
 
-import DB.*;
+import cmp.DB.*;
 
 public class MyPage implements ActionListener {
 	static String em_id = "";

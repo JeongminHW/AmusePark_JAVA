@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-import DB.*;
+import cmp.DB.*;
 
 public class reviewForm implements ActionListener {
 
@@ -68,17 +68,11 @@ public class reviewForm implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		Object obj = e.getSource();
 		if (obj == cancleButton) {
-
 			frame.dispose();
-			;
-
 		} else if (obj == submitButton) {
-
 			bean.setReply_contents(areaReviewContents.getText());
-
 			if (db.reviewInquire(bean)) {
 				System.out.println("성공");
 				EventQueue.invokeLater(new Runnable() {
@@ -92,7 +86,6 @@ public class reviewForm implements ActionListener {
 					}
 				});
 				frame.dispose();
-				;
 			}
 		}
 	}

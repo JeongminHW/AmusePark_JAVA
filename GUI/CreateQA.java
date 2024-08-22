@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTextArea;
 import java.awt.Cursor;
-import DB.*;
+import cmp.DB.*;
 
 public class CreateQA extends JFrame {
 	static String id;

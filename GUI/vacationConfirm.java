@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,7 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.JButton;
-import DB.*;
+import cmp.DB.*;
 import java.util.*;
 
 public class VacationConfirm extends JFrame implements ActionListener {

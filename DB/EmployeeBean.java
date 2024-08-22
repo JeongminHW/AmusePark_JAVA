@@ -1,4 +1,4 @@
-package DB;
+package cmp.DB;
 
 public class EmployeeBean {
 	private String id;
