@@ -15,7 +15,7 @@ public class VacationRequest{
         JFrame frame = new JFrame("휴가 신청");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 400);
-
+        frame.setResizable(false);
     //Define
         JPanel mainPanel = new JPanel();
         CentralDropShadowPanel left = new CentralDropShadowPanel(6, Color.LIGHT_GRAY);

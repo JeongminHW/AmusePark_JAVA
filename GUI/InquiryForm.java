@@ -38,6 +38,7 @@ public class InquiryForm implements ActionListener, MouseListener {
 		frame = new JFrame("문의사항 작성");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(600, 400);
+		frame.setResizable(false);
 
 		mainPanel = new JPanel();
 		headPanel = new JPanel();

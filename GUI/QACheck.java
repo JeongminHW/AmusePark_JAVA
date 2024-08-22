@@ -47,6 +47,7 @@ public class QACheck extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 500);
+		setResizable(false);
 		setVisible(true);
 		setTitle("문의사항 검토 - " + id);
 		mainPanel = new JPanel();

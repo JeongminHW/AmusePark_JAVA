@@ -67,6 +67,7 @@ public class MyPage implements ActionListener {
 			frame.setTitle("마이페이지 - " + alba_id);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(500, 400);
+			frame.setResizable(false);
 			frame.setVisible(true);
 
 			// 정보 불러오기

@@ -35,7 +35,7 @@ public class PTSignUp implements ActionListener, MouseListener {
 	public PTSignUp() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 600);
-
+		frame.setResizable(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(Color.WHITE);
 

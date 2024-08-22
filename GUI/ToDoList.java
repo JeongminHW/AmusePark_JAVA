@@ -42,7 +42,7 @@ public class ToDoList implements ActionListener {
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(600, 400);
 			frame.setVisible(true);
-
+			frame.setResizable(false);
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
@@ -52,6 +52,7 @@ public class ToDoList implements ActionListener {
 			frame = new JFrame("To-Do List - " + em_id);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(600, 400);
+			frame.setResizable(false);
 			frame.setVisible(true);
 
 			mainPanel = new JPanel();

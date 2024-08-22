@@ -124,6 +124,7 @@ public class Vacation extends JFrame implements ActionListener {
 	public Vacation() {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 400);
+		setResizable(false);
 		setVisible(true);
 		setTitle("휴가 신청 - " + id);
 		mainPanel = new JPanel();

@@ -65,6 +65,7 @@ public class reviewForm extends JFrame implements ActionListener {
 		frame = new JFrame("문의사항 검토");
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setSize(600, 400);
+		frame.setResizable(false);
 		frame.setVisible(true);
 
 		contentContainerPanel = new JPanel();

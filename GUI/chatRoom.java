@@ -47,6 +47,7 @@ public class chatRoom extends JFrame {
 		
 		setTitle("채팅방 - " + chatRoomName);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setResizable(false);
 		setBounds(100, 100, 400, 700);
 		mainPanel = new JPanel();
 		mainPanel.setBackground(Color.WHITE);

@@ -38,7 +38,7 @@ public class EmSignUp implements ActionListener, MouseListener {
 	public EmSignUp() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 630);
-
+		frame.setResizable(false);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBackground(Color.WHITE);
 

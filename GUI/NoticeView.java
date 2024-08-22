@@ -50,6 +50,7 @@ public class NoticeView extends JFrame implements ActionListener{
 	public NoticeView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 300);
+		setResizable(false);
 		setVisible(true);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

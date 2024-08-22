@@ -77,6 +77,7 @@ public class AlbaMain extends JFrame implements ActionListener {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 550);
+		setResizable(false);
 		setVisible(true);
 		setTitle("알바 - " + id);
 		mainPanel = new JPanel();

@@ -44,7 +44,7 @@ public class EmLogin implements ActionListener, MouseListener {
 	public EmLogin() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 600);
-
+		frame.setResizable(false);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setBackground(Color.WHITE);
 

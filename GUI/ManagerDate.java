@@ -42,6 +42,7 @@ public class ManagerDate extends JFrame {
 	public ManagerDate() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 300);
+		setResizable(false);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mainPanel.setBackground(Color.WHITE);

@@ -44,7 +44,7 @@ public class PTLogin implements ActionListener, MouseListener {
 	public PTLogin() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 600);
-
+		frame.setResizable(false);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.setBackground(Color.WHITE);
 

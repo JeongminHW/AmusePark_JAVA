@@ -25,7 +25,7 @@ public class Login extends JFrame{
         JFrame frame = new JFrame("직원/알바 선택");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 600);
-        
+        frame.setResizable(false);
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(Color.WHITE);
