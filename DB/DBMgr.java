@@ -1,11 +1,11 @@
-package DB;
+package cmp.DB;
 
 import java.sql.*;
 import java.util.*;
 
 import javax.swing.JOptionPane;
 
-import DB.DBConnectionMgr;
+import cmp.DB.DBConnectionMgr;
 
 public class DBMgr {
 	private DBConnectionMgr pool;
@@ -469,7 +469,7 @@ public class DBMgr {
 		Vector<InquireBean> vlist = new Vector<InquireBean>();
 		try {
 			con = pool.getConnection();
-			sql = "select * from alba_inquire where alba_id = ?";
+			sql = "select * from alba_inquire";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {

@@ -1,4 +1,4 @@
-package DB;
+package cmp.DB;
 
 public class InquireBean {
 	private int inquire_num;

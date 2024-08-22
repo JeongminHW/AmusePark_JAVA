@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,19 +25,10 @@ import java.time.temporal.ChronoUnit;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.JButton;
-import DB.*;
+import cmp.DB.*;
 import java.util.*;
 
 public class VacationConfirm extends JFrame implements ActionListener {
-	static String id;
-	
-	public static String getId() {
-		return id;
-	}
-
-	public static void setId(String id) {
-		VacationConfirm.id = id;
-	}
 
 	static final long serialVersionUID = 1L;
 	JPanel mainPanel;
@@ -75,7 +66,7 @@ public class VacationConfirm extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 400);
 		setVisible(true);
-		setTitle("휴가 컨펌 - " + id);
+		setTitle("휴가 컨펌");
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -127,9 +118,6 @@ public class VacationConfirm extends JFrame implements ActionListener {
 
 		mainForm();
 		
-		if (getTitle().equals("휴가 컨펌 - null")) {
-			dispose();
-		}
 	}
 
 	private void mainForm() {

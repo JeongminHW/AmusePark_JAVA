@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -44,12 +44,12 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
 
-import DB.*;
-import GUI.*;
+import cmp.DB.*;
+import cmp.GUI.*;
 
 public class EmployeeMain extends JFrame implements ActionListener {
-
-	static String id;
+	private static EmployeeMain instance;
+	private static String id;
 
 	public static String getId() {
 		return id;
@@ -58,7 +58,13 @@ public class EmployeeMain extends JFrame implements ActionListener {
 	public static void setId(String id) {
 		EmployeeMain.id = id;
 	}
-
+	
+	public static EmployeeMain getInstance() {
+        if (instance == null) {
+            instance = new EmployeeMain();
+        }
+        return instance;
+    }
 	DBMgr db = new DBMgr();
 	Vector<TodoBean> vlist;
 
@@ -87,12 +93,12 @@ public class EmployeeMain extends JFrame implements ActionListener {
 	JPanel newPanel;
 	JLabel newJLabel;
 
-	ImageIcon vacation_icon = new ImageIcon("./IMG/vacation_img.png");
-	ImageIcon date_icon = new ImageIcon("./IMG/schedule_img.png");
-	ImageIcon mypage_icon = new ImageIcon("./IMG/user_img.png");
-	ImageIcon todo_icon = new ImageIcon("./IMG/todo_img.png");
-	ImageIcon ask_icon = new ImageIcon("./IMG/question_img.png");
-	ImageIcon chat_icon = new ImageIcon("./IMG/chat_img.png");
+	ImageIcon vacation_icon = new ImageIcon("./cmp/IMG/vacation_img.png");
+	ImageIcon date_icon = new ImageIcon("./cmp/IMG/schedule_img.png");
+	ImageIcon mypage_icon = new ImageIcon("./cmp/IMG/user_img.png");
+	ImageIcon todo_icon = new ImageIcon("./cmp/IMG/todo_img.png");
+	ImageIcon ask_icon = new ImageIcon("./cmp/IMG/question_img.png");
+	ImageIcon chat_icon = new ImageIcon("./cmp/IMG/chat_img.png");
 	JButton vacationButton = new RoundedButton(vacation_icon, 20);
 	JButton dateButton = new RoundedButton(date_icon, 20);
 	JButton myPageButton = new RoundedButton(mypage_icon, 20);
@@ -103,6 +109,7 @@ public class EmployeeMain extends JFrame implements ActionListener {
 	JLabel myPageLabel = new JLabel("마이페이지");
 	JLabel QALabel = new JLabel("문의사항");
 	JLabel todoLabel = new JLabel("할일");
+	JButton logOut = new RoundedButton("로그아웃", 15);
 
 	/**
 	 * Create the frame.
@@ -265,6 +272,23 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		todoLabel.setFont(new Font("맑은 고딕", Font.BOLD, 12));
 		todoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		appPanel_4.add(todoLabel);
+		
+		for(int i = 0; i<4; i++) {
+			JPanel panel = new JPanel();
+			panel.setBackground(Color.white);
+			appContainer.add(panel);
+		}
+		JPanel logoutPanel = new JPanel();
+		logoutPanel.setBackground(Color.white);
+		logOut.setMaximumSize(new Dimension(60, 23));
+		logOut.setPreferredSize(new Dimension(60, 23));
+		logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+		logOut.setFont(new Font("맑은 고딕", Font.BOLD, 12));
+		logOut.setBackground(Color.GRAY);
+		logOut.setForeground(Color.WHITE);
+		logoutPanel.add(logOut, BorderLayout.SOUTH);
+		logoutPanel.add(Box.createVerticalStrut(100));
+		appContainer.add(logoutPanel);
 
 		CentralDropShadowPanel ChatingPanel = new CentralDropShadowPanel(Color.LIGHT_GRAY, 30);
 		ChatingPanel.setBackground(Color.WHITE);
@@ -353,6 +377,7 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		myPageButton.addActionListener(this);
 		QAButton.addActionListener(this);
 		todoButton.addActionListener(this);
+		logOut.addActionListener(this);
 
 		updateTodoPanel();
 
@@ -526,7 +551,7 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		CardLayout cardLayout = (CardLayout) cardPanel.getLayout();
 
 		// 채팅 패널만 업데이트
-		// JPanel chatPanel = createChatPanel();
+		 JPanel chatPanel = createChatPanel();
 
 		// 기존 ChatPanel을 찾아서 교체
 		for (Component comp : cardPanel.getComponents()) {
@@ -538,9 +563,9 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		}
 
 		// 새로 생성된 chatPanel을 추가 (스크롤 가능하게 처리)
-		// JScrollPane chatScrollPane = createScrollPane(chatPanel);
-		// chatScrollPane.setName("ChatPanel");
-		// cardPanel.add(chatScrollPane, "ChatPanel");
+		 JScrollPane chatScrollPane = createScrollPane(chatPanel);
+		 chatScrollPane.setName("ChatPanel");
+		 cardPanel.add(chatScrollPane, "ChatPanel");
 
 		// 레이아웃 재계산 및 화면 갱신
 		cardPanel.revalidate();
@@ -556,8 +581,6 @@ public class EmployeeMain extends JFrame implements ActionListener {
 		Object obj = e.getSource();
 		if (obj == vacationButton) {
 			if (db.CheckManagerEmployee(id)) {
-				VacationConfirm vconfirm = new VacationConfirm();
-				vconfirm.setId(id);
 				new VacationConfirm();
 			} else {
 				Vacation vaca = new Vacation();
@@ -568,18 +591,32 @@ public class EmployeeMain extends JFrame implements ActionListener {
 			if (db.CheckManagerEmployee(id)) {
 				NoticeCreate nc = new NoticeCreate();
 				nc.setId(id);
+				//setVisible(false);
+				dispose();
 			} else {
-				NoticeView nv = new NoticeView();
-				nv.setId(id);
+				new NoticeView();
 			}
 		} else if (obj == myPageButton) {
 			MyPage mypage = new MyPage();
 			mypage.setEm_id(id);
+			new MyPage();
 		} else if (obj == QAButton) {
-			QACheck qa = new QACheck(id);
+			if(db.CheckManagerEmployee(id)) {
+				QACheck qa = new QACheck(id);
+				dispose();
+			}
+			else {
+				JOptionPane.showMessageDialog(null, "권한이 없습니다.", "문의사항", JOptionPane.ERROR_MESSAGE);
+			}
 		} else if (obj == todoButton) {
 			ToDoList todo = new ToDoList();
 			todo.setEm_id(id);
+			new ToDoList();
+			dispose();
+		}
+		else if(obj == logOut) {
+			dispose();
+			new EmLogin();
 		}
 	}
 

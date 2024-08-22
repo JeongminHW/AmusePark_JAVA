@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -39,7 +39,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import javax.swing.DefaultComboBoxModel;
 
-import DB.*;
+import cmp.DB.*;
 
 import java.util.*;
 
@@ -564,9 +564,14 @@ public class Vacation extends JFrame implements ActionListener {
 				bean.setStart(strDate);
 				bean.setEnd(endDate);
 				bean.setReason(vacationReasonTextfield.getText());
-				db.saveVacationEmployee(bean);
-				JOptionPane.showMessageDialog(null, "휴가 신청이 완료되었습니다.", "휴가 신청", JOptionPane.PLAIN_MESSAGE);
-				dispose();
+				if(db.TotalVacation(id) > 0) {
+					db.saveVacationEmployee(bean);
+					JOptionPane.showMessageDialog(null, "휴가 신청이 완료되었습니다.", "휴가 신청", JOptionPane.PLAIN_MESSAGE);
+					dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "휴가 신청이 불가합니다.", "휴가 신청", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 

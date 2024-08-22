@@ -1,4 +1,4 @@
-package DB;
+package cmp.DB;
 
 public class AlbaBean {
 	private String id;

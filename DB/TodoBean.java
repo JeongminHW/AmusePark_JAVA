@@ -1,4 +1,4 @@
-package DB;
+package cmp.DB;
 
 public class TodoBean {
 	private int num;

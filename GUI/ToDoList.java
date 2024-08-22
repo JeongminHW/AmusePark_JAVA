@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,9 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 import javax.swing.*;
 
-import DB.DBMgr;
-import DB.TodoBean;
-import GUI.EmployeeMain;
+import cmp.DB.*;
 
 public class ToDoList implements ActionListener {
 	static String em_id = "";
@@ -43,6 +41,7 @@ public class ToDoList implements ActionListener {
 			frame = new JFrame("To-Do List - " + em_id);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(600, 400);
+			frame.setVisible(true);
 
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -53,6 +52,7 @@ public class ToDoList implements ActionListener {
 			frame = new JFrame("To-Do List - " + em_id);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(600, 400);
+			frame.setVisible(true);
 
 			mainPanel = new JPanel();
 			mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -289,6 +289,8 @@ public class ToDoList implements ActionListener {
 			frame.dispose();
 			if (!em_id.equals("")) {
 				EmployeeMain em = new EmployeeMain();
+				em.contentPanel.revalidate();
+				em.contentPanel.repaint();
 				em.setId(em_id);
 			} else if (!alba_id.equals("")) {
 				AlbaMain am = new AlbaMain(alba_id);
@@ -308,6 +310,6 @@ public class ToDoList implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		new ToDoList(); // 실제 ID로 대체 필요
+		new ToDoList(); 
 	}
 }

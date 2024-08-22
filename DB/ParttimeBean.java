@@ -1,4 +1,4 @@
-package DB;
+package cmp.DB;
 
 public class ParttimeBean {
 	private String part_time;

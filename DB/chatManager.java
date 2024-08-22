@@ -1,4 +1,4 @@
-package DB;
+package cmp.DB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

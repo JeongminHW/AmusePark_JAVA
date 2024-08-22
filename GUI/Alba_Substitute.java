@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
-import DB.*;
+import cmp.DB.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
