@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,19 +25,22 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
-import org.xnio.channels.SslChannel;
-
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import javax.swing.DefaultComboBoxModel;
 
-import DB.*;
+import cmp.DB.*;
+
 import java.util.*;
 
 public class Vacation extends JFrame implements ActionListener {
@@ -116,11 +119,13 @@ public class Vacation extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 * 
-	 * @throws ParseException
+	 *
 	 */
-	public Vacation() throws ParseException {
+	public Vacation() {
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 400);
+		setVisible(true);
+		setTitle("휴가 신청 - " + id);
 		mainPanel = new JPanel();
 		mainPanel.setBackground(new Color(255, 255, 255));
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -346,12 +351,11 @@ public class Vacation extends JFrame implements ActionListener {
 				dateEDayCombobox.addItem(Integer.toString(i));
 			}
 		}
+		System.out.println(getId());
 
 		// 휴가 일수
-		vlist = db.TotalVacation("asdf123");
-		System.out.println(vlist.get(0).getUsable_vacation());
-		int Totalvacation = vlist.get(0).getUsable_vacation();
-		lblNewLabel_4.setText("남은 휴가 : " + Integer.toString(Totalvacation));
+		int Totalvacation =  db.TotalVacation(id);
+		lblNewLabel_4.setText("남은 휴가 : " + Totalvacation);
 
 		// setOpaque
 		rightUpperTitlePanel.setOpaque(false);
@@ -530,6 +534,10 @@ public class Vacation extends JFrame implements ActionListener {
 
 		cancelButton.addActionListener(this);
 		confirmButton.addActionListener(this);
+		
+		if (getTitle().equals("휴가 신청 - null")) {
+			dispose();
+		}
 	}
 
 	@Override
@@ -540,46 +548,30 @@ public class Vacation extends JFrame implements ActionListener {
 		String Eyear = (String) dateEYearCombobox.getSelectedItem();
 		String Emonth = (String) dateEMonthCombobox.getSelectedItem();
 		String Eday = (String) dateEDayCombobox.getSelectedItem();
-		// 날짜 포맷 형식, 시작일 문자열, 종료일 문자열을 정의합니다.
-		String dateFormatType = "yyyyMMdd";
-		String strDate = Syear + "" + Smonth + "" + Sday;
-		String endDate = Eyear + "" + Emonth + "" + Eday;
-
-		// SimpleDateFormat 객체를 생성하고 포맷 형식을 설정합니다.
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormatType);
-
-		// 시작일과 종료일 문자열을 Date 객체로 변환합니다.
-		Date from;
-		Date to;
-		long diff;
-		long re;
 
 		Object obj = e.getSource();
 		if (obj == cancelButton) {
 			dispose();
 		} else if (obj == confirmButton) {
-			if(!Syear.equals("선택") && !Smonth.equals("선택") && !Sday.equals("선택") && !Eyear.equals("선택") && !Emonth.equals("선택") && !Eday.equals("선택")) {
-				try {
-					from = simpleDateFormat.parse(strDate);
-					to = simpleDateFormat.parse(endDate);
-					// 두 날짜의 차이를 밀리초 단위로 계산합니다.
-					diff = to.getTime() - from.getTime();
+			if (!Syear.equals("선택") && !Smonth.equals("선택") && !Sday.equals("선택") && !Eyear.equals("선택")
+					&& !Emonth.equals("선택") && !Eday.equals("선택")) {
+				// 날짜 문자열
+				String strDate = Syear + "" + Smonth + "" + Sday;
+				String endDate = Eyear + "" + Emonth + "" + Eday;
 
-					// 밀리초 단위의 차이를 일수로 변환합니다.
-					re = diff / 86400000L;
-					// 결과를 출력합니다.
-					System.out.println(from);
-				} catch (ParseException e1) {
-					JOptionPane.showMessageDialog(null, "휴가 시작일과 종료일을 선택해주세요.", "휴가 신청", JOptionPane.ERROR_MESSAGE);
-				}
 				VacationBean bean = new VacationBean();
-				bean.setId("asdf123");
+				bean.setId(id);
 				bean.setStart(strDate);
 				bean.setEnd(endDate);
 				bean.setReason(vacationReasonTextfield.getText());
-				db.savaVacationEmployee(bean);
-				JOptionPane.showMessageDialog(null, "휴가 신청이 완료되었습니다.", "휴가 신청", JOptionPane.PLAIN_MESSAGE);
-				dispose();
+				if(db.TotalVacation(id) > 0) {
+					db.saveVacationEmployee(bean);
+					JOptionPane.showMessageDialog(null, "휴가 신청이 완료되었습니다.", "휴가 신청", JOptionPane.PLAIN_MESSAGE);
+					dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "휴가 신청이 불가합니다.", "휴가 신청", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 
@@ -590,8 +582,7 @@ public class Vacation extends JFrame implements ActionListener {
 			@Override
 			public void run() {
 				try {
-					Vacation frame = new Vacation();
-					frame.setVisible(true);
+					new Vacation();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

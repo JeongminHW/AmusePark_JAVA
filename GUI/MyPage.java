@@ -1,4 +1,4 @@
-package GUI;
+package cmp.GUI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +11,7 @@ import javax.swing.*;
 
 import org.xnio.channels.SslChannel;
 
-import DB.*;
+import cmp.DB.*;
 
 public class MyPage implements ActionListener {
 	static String em_id = "";
@@ -67,6 +67,7 @@ public class MyPage implements ActionListener {
 			frame.setTitle("마이페이지 - " + alba_id);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(500, 400);
+			frame.setVisible(true);
 
 			// 정보 불러오기
 			loadAlba(alba_id);
@@ -80,6 +81,7 @@ public class MyPage implements ActionListener {
 			frame.setTitle("마이페이지 - " + getEm_id());
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(500, 400);
+			frame.setVisible(true);
 
 			// 정보 불러오기
 			loadEmployeeInfo(em_id);
@@ -190,16 +192,6 @@ public class MyPage implements ActionListener {
 				} else {
 					JOptionPane.showMessageDialog(null, "비밀번호가 다릅니다.", "수정", JOptionPane.ERROR_MESSAGE);
 				}
-			}
-
-			if (managerChk == true) {
-				db.ManagerEmployee(em_id);
-				JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.", "수정", JOptionPane.PLAIN_MESSAGE);
-				frame.dispose();
-			} else {
-				db.NonManagerEmployee(em_id);
-				JOptionPane.showMessageDialog(null, "수정이 완료되었습니다.", "수정", JOptionPane.PLAIN_MESSAGE);
-				frame.dispose();
 			}
 		} else if (obj == cancelButton) {
 			frame.dispose();

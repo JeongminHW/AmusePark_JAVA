@@ -64,6 +64,7 @@ public class reviewForm extends JFrame implements ActionListener {
 		frame = new JFrame("문의사항 검토");
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setSize(600, 400);
+		frame.setVisible(true);
 
 		contentContainerPanel = new JPanel();
 		contentContainerPanel.setOpaque(false);
@@ -211,16 +212,13 @@ public class reviewForm extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		Object obj = e.getSource();
 		if (obj == cancelButton) {
 
 			frame.dispose();
 
 		} else if (obj == submitButton) {
-
 			bean.setReply_contents(areaReviewContents.getText());
-
 			if (db.reviewInquire(bean)) {
 				System.out.println("성공");
 				EventQueue.invokeLater(new Runnable() {

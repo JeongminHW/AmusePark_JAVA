@@ -7,14 +7,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+
+import cmp.DB.*;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.awt.FlowLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -24,8 +35,10 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 
-public class Alba_Substitute extends JFrame implements ActionListener {
+public class Alba_Substitute extends JFrame {
 
+    private static DBConnectionMgr dbConnectionMgr = DBConnectionMgr.getInstance();
+	
 	static final long serialVersionUID = 1L;
 	JPanel mainPanel;
 	JPanel upperPanel;
@@ -92,13 +105,17 @@ public class Alba_Substitute extends JFrame implements ActionListener {
 	JComboBox dateEDayComboBox = new JComboBox<>();
 	JComboBox whoComboBox = new JComboBox<>();
 	JButton confirmButton = new RoundedButton("확인", 25);
+	
+	JFrame frame = new JFrame("Deta Frame");
 
 	/**
 	 * Create the frame.
+	 * @throws Exception 
 	 */
-	public Alba_Substitute() {
+	public Alba_Substitute() throws Exception {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1050, 500);
+		setVisible(true);
 		mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		mainPanel.setBackground(Color.WHITE);
@@ -508,6 +525,7 @@ public class Alba_Substitute extends JFrame implements ActionListener {
 		whoPanel.setOpaque(false);
 		whoPanel.setLayout(new BoxLayout(whoPanel, BoxLayout.Y_AXIS));
 
+        loadSubstituteNames(whoComboBox); // 콤보박스에 알바 이름 로드
 		whoComboBox.setFont(new Font("맑은 고딕", Font.PLAIN, 12));
 		whoComboBox.setFocusable(false);
 		whoPanel.add(whoComboBox);
@@ -561,7 +579,8 @@ public class Alba_Substitute extends JFrame implements ActionListener {
 		downerPanel.add(dateReasonContentPanel);
 		dateReasonContentPanel.setLayout(new BorderLayout(0, 0));
 
-		dateReasonContentContainer.setBorder(new EmptyBorder(0, 10, 0, 40));
+		dateReasonContentContainer.setBorder(new EmptyBorder(0, 10, 0, 40)
+				);
 		dateReasonContentContainer.setOpaque(false);
 		dateReasonContentPanel.add(dateReasonContentContainer, BorderLayout.CENTER);
 		dateReasonContentContainer.setLayout(new BoxLayout(dateReasonContentContainer, BoxLayout.Y_AXIS));
@@ -582,12 +601,129 @@ public class Alba_Substitute extends JFrame implements ActionListener {
 		confirmButton.setForeground(Color.WHITE);
 
 		System.out.println(upperLeftPanel.getHeight());
-	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-	}
+	 confirmButton.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+             String yearFromStr = (String) dateSYearComboBox.getSelectedItem();
+             String monthFromStr = (String) dateSMonthComboBox.getSelectedItem();
+             String dayFromStr = (String) dateSDayComboBox.getSelectedItem();
+             String yearToStr = (String) dateEYearComboBox.getSelectedItem();
+             String monthToStr = (String)dateEMonthComboBox.getSelectedItem();
+             String dayToStr = (String) dateEDayComboBox.getSelectedItem();
+             String substituteName = (String) whoComboBox.getSelectedItem();
+             String reason = dateReasonTextField.getText();
 
+             String startDate = String.format("%s-%s-%s 00:00:00", yearFromStr, monthFromStr, dayFromStr);
+             String endDate = String.format("%s-%s-%s 23:59:59", yearToStr, monthToStr, dayToStr);
+
+             Connection connection = null;
+             PreparedStatement statement = null;
+             ResultSet resultSet = null;
+
+             try {
+                 connection = dbConnectionMgr.getConnection();
+
+                 // 알바 이름으로 아이디 찾기
+                 String getIdSql = "SELECT alba_id FROM alba WHERE alba_name = ?";
+                 statement = connection.prepareStatement(getIdSql);
+                 statement.setString(1, substituteName);
+                 resultSet = statement.executeQuery();
+
+                 String substituteId = null;
+                 if (resultSet.next()) {
+                     substituteId = resultSet.getString("alba_id");
+                 }
+
+                 if (substituteId != null) {
+                     // 대타 신청 저장
+                     String insertSql = "INSERT INTO alba_substitute (req_alba_id, sub_alba_id, sub_start, sub_end) VALUES (?, ?, ?, ?)";
+                     statement.close(); // 기존의 PreparedStatement를 닫습니다.
+                     statement = connection.prepareStatement(insertSql);
+                     statement.setString(1, "aaa"); // 신청자 id(임시)
+                     statement.setString(2, substituteId);
+                     statement.setString(3, startDate);
+                     statement.setString(4, endDate);
+                     statement.executeUpdate();
+                     JOptionPane.showMessageDialog(frame, "대타 신청이 완료되었습니다.");
+                 } else {
+                     JOptionPane.showMessageDialog(frame, "입력한 이름의 알바가 존재하지 않습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                 }
+             } catch (SQLException ex) {
+                 ex.printStackTrace();
+                 JOptionPane.showMessageDialog(frame, "다시 시도해주세요" , "오류", JOptionPane.ERROR_MESSAGE);
+             } catch (Exception e1) {
+					e1.printStackTrace();
+				} finally {
+                 if (resultSet != null) {
+                     try {
+                         resultSet.close();
+                     } catch (SQLException ex) {
+                         ex.printStackTrace();
+                     }
+                 }
+                 if (statement != null) {
+                     try {
+                         statement.close();
+                     } catch (SQLException ex) {
+                         ex.printStackTrace();
+                     }
+                 }
+                 if (connection != null) {
+                     dbConnectionMgr.freeConnection(connection, statement);
+                 }
+             }
+         }
+     });
+     frame.setVisible(true);
+}
+	
+	 private static void loadSubstituteNames(JComboBox<String> comboBox) throws Exception {
+	        Connection connection = null;
+	        PreparedStatement statement = null;
+	        ResultSet resultSet = null;
+
+	        try {
+	            connection = dbConnectionMgr.getConnection();
+
+	            // 알바 이름 목록을 가져오는 SQL 쿼리
+	            String sql = "SELECT alba_name FROM alba";
+	            statement = connection.prepareStatement(sql);
+	            resultSet = statement.executeQuery();
+
+	            List<String> names = new ArrayList<>();
+	            while (resultSet.next()) {
+	                names.add(resultSet.getString("alba_name"));
+	            }
+
+	            // JComboBox에 알바 이름을 추가
+	            for (String name : names) {
+	                comboBox.addItem(name);
+	            }
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	        } finally {
+	            if (resultSet != null) {
+	                try {
+	                    resultSet.close();
+	                } catch (SQLException ex) {
+	                    ex.printStackTrace();
+	                }
+	            }
+	            if (statement != null) {
+	                try {
+	                    statement.close();
+	                } catch (SQLException ex) {
+	                    ex.printStackTrace();
+	                }
+	            }
+	            if (connection != null) {
+	                dbConnectionMgr.freeConnection(connection, statement);
+	            }
+	        }
+	    }
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -595,8 +731,7 @@ public class Alba_Substitute extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Alba_Substitute frame = new Alba_Substitute();
-					frame.setVisible(true);
+					new Alba_Substitute();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
