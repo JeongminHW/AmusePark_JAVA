@@ -48,6 +48,7 @@ public class QACheck extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 500);
 		setVisible(true);
+		setTitle("문의사항 검토 - " + id);
 		mainPanel = new JPanel();
 		mainPanel.setBackground(Color.WHITE);
 		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -133,6 +134,10 @@ public class QACheck extends JFrame {
 				createQAPanel(contentPanel, bean);
 			}
 		}
+		
+		if(getTitle().equals("문의사항 검토 - null")) {
+			dispose();
+		}
 	}
 
 	public void createQAPanel(JPanel contentPanel, InquireBean bean) {
@@ -187,13 +192,12 @@ public class QACheck extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				new EmployeeMain();
 			}
 		});
 
 		answerButton.addActionListener(new ActionListener() {
-
 			InquireBean bean2 = bean;
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				InquireBean bean = bean2;
@@ -203,7 +207,6 @@ public class QACheck extends JFrame {
 				bean.setInquire_contents(bean.getInquire_contents());
 
 				QACheck frame = new QACheck("qwer111");
-
 				rf = new reviewForm(bean, frame);
 			}
 		});

@@ -62,7 +62,8 @@ public class chatRoom extends JFrame {
 		mainPanel.add(chatPanel, BorderLayout.CENTER);
 		
 		JTextArea ta = new JTextArea();
-		
+		mainPanel.setBackground(Color.decode("#D1E9F6"));
+		ta.setBackground(Color.decode("#D1E9F6"));
 		ta.setBorder(new EmptyBorder(10, 10, 10, 10));
 		ta.setEditable(false);
 		chatPanel.add(ta);
